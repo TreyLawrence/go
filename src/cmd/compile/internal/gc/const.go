@@ -833,7 +833,7 @@ func evconst(n *Node) {
 	}
 
 	// check for compatible general types (numeric, string, etc)
-	if wl != wr {
+	if wl != wr && wl != TINTER && wr != TINTER {
 		goto illegal
 	}
 
@@ -851,7 +851,8 @@ func evconst(n *Node) {
 			n.Left = nl
 		}
 
-		if nl.Type.Etype != nr.Type.Etype {
+		if nl.Type.Etype != nr.Type.Etype && nl.Type.Etype != TINTER &&
+			nr.Type.Etype != TINTER {
 			goto illegal
 		}
 

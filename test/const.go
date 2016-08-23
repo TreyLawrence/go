@@ -123,9 +123,41 @@ func floats() {
 	assert(f == f1e3, "f == f1e3")
 }
 
+func interfaces() {
+	var (
+		iPtr interface{}
+		nil_ *int
+		five = 5
+
+		_ = nil == interface{}(nil)
+		_ = interface{}(nil) == nil
+	)
+	II := func(i1 interface{}, i2 interface{}) bool {
+		return i1 == i2
+	}
+	NI := func(i int, in interface{}) bool {
+		return i == in
+	}
+	PI := func(i *int, in interface{}) bool {
+		return i == in
+	}
+
+	assert((interface{}(nil) == interface{}(nil)) == II(iPtr, iPtr),
+		"for interface{}==interface{} compiler == runtime")
+	assert(((*int)(nil) == interface{}(nil)) == PI(nil_, interface{}(nil_)),
+		"for *int==interface{} compiler == runtime")
+	assert((5 == interface{}(5)) == NI(five, five),
+		"for int==interface{} compiler == runtime")
+	assert((interface{}(nil) == (*int)(nil)) == PI(nil_, interface{}(nil_)),
+		"for interface{}==*int compiler == runtime")
+	assert((interface{}(5) == 5) == NI(five, five),
+		"for interface{}==int comipiler == runtime")
+}
+
 func main() {
 	ints()
 	floats()
+	interfaces()
 
 	assert(ctrue == true, "ctrue == true")
 	assert(cfalse == false, "cfalse == false")
